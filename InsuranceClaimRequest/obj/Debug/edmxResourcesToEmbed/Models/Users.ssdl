@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="UsersModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="UsersModelStoreContainer">
+    <EntitySet Name="Users" EntityType="UsersModel.Store.Users" store:Type="Tables" Schema="dbo" />
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="LoginId" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="First Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Last Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Orgl Stamp" Type="datetime" />
+    <Property Name="Orgl User" Type="nvarchar" MaxLength="50" />
+    <Property Name="Updt Stamp" Type="datetime" />
+    <Property Name="Updt User" Type="nvarchar" MaxLength="50" />
+    <Property Name="Expired" Type="char" MaxLength="10" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+</Schema>

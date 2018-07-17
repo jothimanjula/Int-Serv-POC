@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="InsuranceModelStoreContainer" CdmEntityContainer="InsuranceClaimReqEntities">
+    <EntitySetMapping Name="Benefits">
+      <EntityTypeMapping TypeName="InsuranceModel.Benefit">
+        <MappingFragment StoreEntitySet="Benefit">
+          <ScalarProperty Name="BenefitID" ColumnName="BenefitID" />
+          <ScalarProperty Name="BenefitCode" ColumnName="BenefitCode" />
+          <ScalarProperty Name="BenefitName" ColumnName="BenefitName" />
+          <ScalarProperty Name="NormalBenefitPercentage" ColumnName="NormalBenefitPercentage" />
+          <ScalarProperty Name="EmergencyBenefitPercentage" ColumnName="EmergencyBenefitPercentage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Insurances">
+      <EntityTypeMapping TypeName="InsuranceModel.Insurance">
+        <MappingFragment StoreEntitySet="Insurance">
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="InsurerName" ColumnName="InsurerName" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="ReceivedClaimAmount" ColumnName="ReceivedClaimAmount" />
+          <ScalarProperty Name="ApprovedTotalAmount" ColumnName="ApprovedTotalAmount" />
+          <ScalarProperty Name="ApprovedOverrideAmount" ColumnName="ApprovedOverrideAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InsuranceLineItems">
+      <EntityTypeMapping TypeName="InsuranceModel.InsuranceLineItem">
+        <MappingFragment StoreEntitySet="InsuranceLineItems">
+          <ScalarProperty Name="InsurerLineItemId" ColumnName="InsurerLineItemId" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="BillDate" ColumnName="BillDate" />
+          <ScalarProperty Name="ClaimItemDescription" ColumnName="ClaimItemDescription" />
+          <ScalarProperty Name="AmountClaimed" ColumnName="AmountClaimed" />
+          <ScalarProperty Name="BenefitEmergency" ColumnName="BenefitEmergency" />
+          <ScalarProperty Name="BenefitId" ColumnName="BenefitId" />
+          <ScalarProperty Name="BenefitAmount" ColumnName="BenefitAmount" />
+          <ScalarProperty Name="ApprovedAmount" ColumnName="ApprovedAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="InsuranceModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+          <ScalarProperty Name="First_Name" ColumnName="First Name" />
+          <ScalarProperty Name="Last_Name" ColumnName="Last Name" />
+          <ScalarProperty Name="Orgl_Stamp" ColumnName="Orgl Stamp" />
+          <ScalarProperty Name="Orgl_User" ColumnName="Orgl User" />
+          <ScalarProperty Name="Updt_Stamp" ColumnName="Updt Stamp" />
+          <ScalarProperty Name="Updt_User" ColumnName="Updt User" />
+          <ScalarProperty Name="Expired" ColumnName="Expired" />
+          <ScalarProperty Name="password" ColumnName="password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

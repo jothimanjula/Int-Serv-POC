@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InsuranceModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="InsuranceModelStoreContainer">
+    <EntitySet Name="Benefit" EntityType="InsuranceModel.Store.Benefit" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Insurance" EntityType="InsuranceModel.Store.Insurance" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="InsuranceLineItems" EntityType="InsuranceModel.Store.InsuranceLineItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="InsuranceModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK__Insurance__Benef__34C8D9D1" Association="InsuranceModel.Store.FK__Insurance__Benef__34C8D9D1">
+      <End Role="Benefit" EntitySet="Benefit" />
+      <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Insurance__Insur__35BCFE0A" Association="InsuranceModel.Store.FK__Insurance__Insur__35BCFE0A">
+      <End Role="Insurance" EntitySet="Insurance" />
+      <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Benefit">
+    <Key>
+      <PropertyRef Name="BenefitID" />
+    </Key>
+    <Property Name="BenefitID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="BenefitCode" Type="nchar" Nullable="false" MaxLength="10" />
+    <Property Name="BenefitName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="NormalBenefitPercentage" Type="int" />
+    <Property Name="EmergencyBenefitPercentage" Type="int" />
+  </EntityType>
+  <EntityType Name="Insurance">
+    <Key>
+      <PropertyRef Name="InsurerId" />
+    </Key>
+    <Property Name="InsurerId" Type="nvarchar" Nullable="false" MaxLength="10" StoreGeneratedPattern="Identity" />
+    <Property Name="InsurerName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
+    <Property Name="ReceivedClaimAmount" Type="decimal" Nullable="false" />
+    <Property Name="ApprovedTotalAmount" Type="decimal" Nullable="false" />
+    <Property Name="ApprovedOverrideAmount" Type="decimal" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InsuranceLineItems">
+    <Key>
+      <PropertyRef Name="InsurerLineItemId" />
+    </Key>
+    <Property Name="InsurerLineItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="InsurerId" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="BillDate" Type="datetime" Nullable="false" />
+    <Property Name="ClaimItemDescription" Type="nvarchar" MaxLength="500" />
+    <Property Name="AmountClaimed" Type="decimal" Nullable="false" />
+    <Property Name="BenefitEmergency" Type="bit" Nullable="false" />
+    <Property Name="BenefitId" Type="int" />
+    <Property Name="BenefitAmount" Type="decimal" Nullable="false" />
+    <Property Name="ApprovedAmount" Type="decimal" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="LoginId" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="First Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Last Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Orgl Stamp" Type="datetime" />
+    <Property Name="Orgl User" Type="nvarchar" MaxLength="50" />
+    <Property Name="Updt Stamp" Type="datetime" />
+    <Property Name="Updt User" Type="nvarchar" MaxLength="50" />
+    <Property Name="Expired" Type="char" MaxLength="10" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__Insurance__Benef__34C8D9D1">
+    <End Role="Benefit" Type="InsuranceModel.Store.Benefit" Multiplicity="0..1" />
+    <End Role="InsuranceLineItems" Type="InsuranceModel.Store.InsuranceLineItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Benefit">
+        <PropertyRef Name="BenefitID" />
+      </Principal>
+      <Dependent Role="InsuranceLineItems">
+        <PropertyRef Name="BenefitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Insurance__Insur__35BCFE0A">
+    <End Role="Insurance" Type="InsuranceModel.Store.Insurance" Multiplicity="1" />
+    <End Role="InsuranceLineItems" Type="InsuranceModel.Store.InsuranceLineItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Insurance">
+        <PropertyRef Name="InsurerId" />
+      </Principal>
+      <Dependent Role="InsuranceLineItems">
+        <PropertyRef Name="InsurerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

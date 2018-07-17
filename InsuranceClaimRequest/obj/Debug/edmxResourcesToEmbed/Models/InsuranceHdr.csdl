@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InsuranceModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="InsuranceClaimRequestEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Benefits" EntityType="InsuranceModel.Benefit" />
+    <EntitySet Name="Insurances" EntityType="InsuranceModel.Insurance" />
+    <EntitySet Name="InsuranceLineItems" EntityType="InsuranceModel.InsuranceLineItem" />
+    <EntitySet Name="Users" EntityType="InsuranceModel.User" />
+    <AssociationSet Name="FK__Insurance__Benef__2E1BDC42" Association="InsuranceModel.FK__Insurance__Benef__2E1BDC42">
+      <End Role="Benefit" EntitySet="Benefits" />
+      <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Insurance__Insur__2F10007B" Association="InsuranceModel.FK__Insurance__Insur__2F10007B">
+      <End Role="Insurance" EntitySet="Insurances" />
+      <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Benefit">
+    <Key>
+      <PropertyRef Name="BenefitID" />
+    </Key>
+    <Property Name="BenefitID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="BenefitCode" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+    <Property Name="BenefitName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="NormalBenefitPercentage" Type="Int32" />
+    <Property Name="EmergencyBenefitPercentage" Type="Int32" />
+    <NavigationProperty Name="InsuranceLineItems" Relationship="InsuranceModel.FK__Insurance__Benef__2E1BDC42" FromRole="Benefit" ToRole="InsuranceLineItems" />
+  </EntityType>
+  <EntityType Name="Insurance">
+    <Key>
+      <PropertyRef Name="InsurerId" />
+    </Key>
+    <Property Name="InsurerId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="InsurerName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ReceivedClaimAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="ApprovedTotalAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="ApprovedOverrideAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <NavigationProperty Name="InsuranceLineItems" Relationship="InsuranceModel.FK__Insurance__Insur__2F10007B" FromRole="Insurance" ToRole="InsuranceLineItems" />
+  </EntityType>
+  <EntityType Name="InsuranceLineItem">
+    <Key>
+      <PropertyRef Name="InsurerLineItemId" />
+    </Key>
+    <Property Name="InsurerLineItemId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="InsurerId" Type="Int32" Nullable="false" />
+    <Property Name="BillDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ClaimItemDescription" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+    <Property Name="AmountClaimed" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="BenefitEmergency" Type="Boolean" Nullable="false" />
+    <Property Name="BenefitId" Type="Int32" />
+    <Property Name="BenefitAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="ApprovedAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <NavigationProperty Name="Benefit" Relationship="InsuranceModel.FK__Insurance__Benef__2E1BDC42" FromRole="InsuranceLineItems" ToRole="Benefit" />
+    <NavigationProperty Name="Insurance" Relationship="InsuranceModel.FK__Insurance__Insur__2F10007B" FromRole="InsuranceLineItems" ToRole="Insurance" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="LoginId" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="First_Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Last_Name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Orgl_Stamp" Type="DateTime" Precision="3" />
+    <Property Name="Orgl_User" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Updt_Stamp" Type="DateTime" Precision="3" />
+    <Property Name="Updt_User" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Expired" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+    <Property Name="password" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Insurance__Benef__2E1BDC42">
+    <End Role="Benefit" Type="InsuranceModel.Benefit" Multiplicity="0..1" />
+    <End Role="InsuranceLineItems" Type="InsuranceModel.InsuranceLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Benefit">
+        <PropertyRef Name="BenefitID" />
+      </Principal>
+      <Dependent Role="InsuranceLineItems">
+        <PropertyRef Name="BenefitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Insurance__Insur__2F10007B">
+    <End Role="Insurance" Type="InsuranceModel.Insurance" Multiplicity="1" />
+    <End Role="InsuranceLineItems" Type="InsuranceModel.InsuranceLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Insurance">
+        <PropertyRef Name="InsurerId" />
+      </Principal>
+      <Dependent Role="InsuranceLineItems">
+        <PropertyRef Name="InsurerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

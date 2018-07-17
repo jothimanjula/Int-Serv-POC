@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="UsersModelStoreContainer" CdmEntityContainer="InsuranceEntities1">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="UsersModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+          <ScalarProperty Name="First_Name" ColumnName="First Name" />
+          <ScalarProperty Name="Last_Name" ColumnName="Last Name" />
+          <ScalarProperty Name="Orgl_Stamp" ColumnName="Orgl Stamp" />
+          <ScalarProperty Name="Orgl_User" ColumnName="Orgl User" />
+          <ScalarProperty Name="Updt_Stamp" ColumnName="Updt Stamp" />
+          <ScalarProperty Name="Updt_User" ColumnName="Updt User" />
+          <ScalarProperty Name="Expired" ColumnName="Expired" />
+          <ScalarProperty Name="password" ColumnName="password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

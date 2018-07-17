@@ -1,0 +1,46 @@
+﻿@model InsuranceClaimRequest.Models.User
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Login Page</h2>
+
+@using (Html.BeginForm())
+{
+    
+       @Html.ValidationSummary(true)
+       
+    <div style="border: solid 1px #ccc; padding: 30px 0 30px 30px; border-radius: 5px;
+        width: 325px; margin: auto; display: table;">
+        
+        <table>
+            <tr>
+                <td valign="top">
+                    @Html.LabelFor(model => model.LoginId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.LoginId)
+                    <div style="height: 20px;">@Html.ValidationMessageFor(model => model.LoginId)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    @Html.LabelFor(model => model.password)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.password)
+                    <div style="height: 20px;">@Html.ValidationMessageFor(model => model.password)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+            </tr>
+        </table>
+    </div>
+}

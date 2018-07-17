@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="InsuranceModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="InsuranceModelStoreContainer">
+          <EntitySet Name="Benefit" EntityType="InsuranceModel.Store.Benefit" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Insurance" EntityType="InsuranceModel.Store.Insurance" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="InsuranceLineItems" EntityType="InsuranceModel.Store.InsuranceLineItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="InsuranceModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK__Insurance__Benef__34C8D9D1" Association="InsuranceModel.Store.FK__Insurance__Benef__34C8D9D1">
+            <End Role="Benefit" EntitySet="Benefit" />
+            <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Insurance__Insur__35BCFE0A" Association="InsuranceModel.Store.FK__Insurance__Insur__35BCFE0A">
+            <End Role="Insurance" EntitySet="Insurance" />
+            <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Benefit">
+          <Key>
+            <PropertyRef Name="BenefitID" />
+          </Key>
+          <Property Name="BenefitID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BenefitCode" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="BenefitName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="NormalBenefitPercentage" Type="int" />
+          <Property Name="EmergencyBenefitPercentage" Type="int" />
+        </EntityType>
+        <EntityType Name="Insurance">
+          <Key>
+            <PropertyRef Name="InsurerId" />
+          </Key>
+          <Property Name="InsurerId" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="InsurerName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
+          <Property Name="ReceivedClaimAmount" Type="decimal" Nullable="false" />
+          <Property Name="ApprovedTotalAmount" Type="decimal" Nullable="false" />
+          <Property Name="ApprovedOverrideAmount" Type="decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InsuranceLineItems">
+          <Key>
+            <PropertyRef Name="InsurerLineItemId" />
+          </Key>
+          <Property Name="InsurerLineItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="InsurerId" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="BillDate" Type="datetime" Nullable="false" />
+          <Property Name="ClaimItemDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="AmountClaimed" Type="decimal" Nullable="false" />
+          <Property Name="BenefitEmergency" Type="bit" Nullable="false" />
+          <Property Name="BenefitId" Type="int" />
+          <Property Name="BenefitAmount" Type="decimal" Nullable="false" />
+          <Property Name="ApprovedAmount" Type="decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LoginId" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="First Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Last Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Orgl Stamp" Type="datetime" />
+          <Property Name="Orgl User" Type="nvarchar" MaxLength="50" />
+          <Property Name="Updt Stamp" Type="datetime" />
+          <Property Name="Updt User" Type="nvarchar" MaxLength="50" />
+          <Property Name="Expired" Type="char" MaxLength="10" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__Insurance__Benef__34C8D9D1">
+          <End Role="Benefit" Type="InsuranceModel.Store.Benefit" Multiplicity="0..1" />
+          <End Role="InsuranceLineItems" Type="InsuranceModel.Store.InsuranceLineItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Benefit">
+              <PropertyRef Name="BenefitID" />
+            </Principal>
+            <Dependent Role="InsuranceLineItems">
+              <PropertyRef Name="BenefitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Insurance__Insur__35BCFE0A">
+          <End Role="Insurance" Type="InsuranceModel.Store.Insurance" Multiplicity="1" />
+          <End Role="InsuranceLineItems" Type="InsuranceModel.Store.InsuranceLineItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insurance">
+              <PropertyRef Name="InsurerId" />
+            </Principal>
+            <Dependent Role="InsuranceLineItems">
+              <PropertyRef Name="InsurerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InsuranceModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="InsuranceClaimEntites" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Benefits" EntityType="InsuranceModel.Benefit" />
+          <EntitySet Name="Insurances" EntityType="InsuranceModel.Insurance" />
+          <EntitySet Name="InsuranceLineItems" EntityType="InsuranceModel.InsuranceLineItem" />
+          <EntitySet Name="Users" EntityType="InsuranceModel.User" />
+          <AssociationSet Name="FK__Insurance__Benef__34C8D9D1" Association="InsuranceModel.FK__Insurance__Benef__34C8D9D1">
+            <End Role="Benefit" EntitySet="Benefits" />
+            <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Insurance__Insur__35BCFE0A" Association="InsuranceModel.FK__Insurance__Insur__35BCFE0A">
+            <End Role="Insurance" EntitySet="Insurances" />
+            <End Role="InsuranceLineItems" EntitySet="InsuranceLineItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Benefit">
+          <Key>
+            <PropertyRef Name="BenefitID" />
+          </Key>
+          <Property Name="BenefitID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BenefitCode" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="BenefitName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="NormalBenefitPercentage" Type="Int32" />
+          <Property Name="EmergencyBenefitPercentage" Type="Int32" />
+          <NavigationProperty Name="InsuranceLineItems" Relationship="InsuranceModel.FK__Insurance__Benef__34C8D9D1" FromRole="Benefit" ToRole="InsuranceLineItems" />
+        </EntityType>
+        <EntityType Name="Insurance">
+          <Key>
+            <PropertyRef Name="InsurerId" />
+          </Key>
+          <Property Name="InsurerId" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="InsurerName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReceivedClaimAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="ApprovedTotalAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="ApprovedOverrideAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="InsuranceLineItems" Relationship="InsuranceModel.FK__Insurance__Insur__35BCFE0A" FromRole="Insurance" ToRole="InsuranceLineItems" />
+        </EntityType>
+        <EntityType Name="InsuranceLineItem">
+          <Key>
+            <PropertyRef Name="InsurerLineItemId" />
+          </Key>
+          <Property Name="InsurerLineItemId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="InsurerId" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="BillDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ClaimItemDescription" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="AmountClaimed" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="BenefitEmergency" Type="Boolean" Nullable="false" />
+          <Property Name="BenefitId" Type="Int32" />
+          <Property Name="BenefitAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="ApprovedAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="Benefit" Relationship="InsuranceModel.FK__Insurance__Benef__34C8D9D1" FromRole="InsuranceLineItems" ToRole="Benefit" />
+          <NavigationProperty Name="Insurance" Relationship="InsuranceModel.FK__Insurance__Insur__35BCFE0A" FromRole="InsuranceLineItems" ToRole="Insurance" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginId" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="First_Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Last_Name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Orgl_Stamp" Type="DateTime" Precision="3" />
+          <Property Name="Orgl_User" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Updt_Stamp" Type="DateTime" Precision="3" />
+          <Property Name="Updt_User" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Expired" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="password" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__Insurance__Benef__34C8D9D1">
+          <End Role="Benefit" Type="InsuranceModel.Benefit" Multiplicity="0..1" />
+          <End Role="InsuranceLineItems" Type="InsuranceModel.InsuranceLineItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Benefit">
+              <PropertyRef Name="BenefitID" />
+            </Principal>
+            <Dependent Role="InsuranceLineItems">
+              <PropertyRef Name="BenefitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Insurance__Insur__35BCFE0A">
+          <End Role="Insurance" Type="InsuranceModel.Insurance" Multiplicity="1" />
+          <End Role="InsuranceLineItems" Type="InsuranceModel.InsuranceLineItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insurance">
+              <PropertyRef Name="InsurerId" />
+            </Principal>
+            <Dependent Role="InsuranceLineItems">
+              <PropertyRef Name="InsurerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InsuranceModelStoreContainer" CdmEntityContainer="InsuranceClaimEntites">
+          <EntitySetMapping Name="Benefits">
+            <EntityTypeMapping TypeName="InsuranceModel.Benefit">
+              <MappingFragment StoreEntitySet="Benefit">
+                <ScalarProperty Name="BenefitID" ColumnName="BenefitID" />
+                <ScalarProperty Name="BenefitCode" ColumnName="BenefitCode" />
+                <ScalarProperty Name="BenefitName" ColumnName="BenefitName" />
+                <ScalarProperty Name="NormalBenefitPercentage" ColumnName="NormalBenefitPercentage" />
+                <ScalarProperty Name="EmergencyBenefitPercentage" ColumnName="EmergencyBenefitPercentage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Insurances">
+            <EntityTypeMapping TypeName="InsuranceModel.Insurance">
+              <MappingFragment StoreEntitySet="Insurance">
+                <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+                <ScalarProperty Name="InsurerName" ColumnName="InsurerName" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="ReceivedClaimAmount" ColumnName="ReceivedClaimAmount" />
+                <ScalarProperty Name="ApprovedTotalAmount" ColumnName="ApprovedTotalAmount" />
+                <ScalarProperty Name="ApprovedOverrideAmount" ColumnName="ApprovedOverrideAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InsuranceLineItems">
+            <EntityTypeMapping TypeName="InsuranceModel.InsuranceLineItem">
+              <MappingFragment StoreEntitySet="InsuranceLineItems">
+                <ScalarProperty Name="InsurerLineItemId" ColumnName="InsurerLineItemId" />
+                <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+                <ScalarProperty Name="BillDate" ColumnName="BillDate" />
+                <ScalarProperty Name="ClaimItemDescription" ColumnName="ClaimItemDescription" />
+                <ScalarProperty Name="AmountClaimed" ColumnName="AmountClaimed" />
+                <ScalarProperty Name="BenefitEmergency" ColumnName="BenefitEmergency" />
+                <ScalarProperty Name="BenefitId" ColumnName="BenefitId" />
+                <ScalarProperty Name="BenefitAmount" ColumnName="BenefitAmount" />
+                <ScalarProperty Name="ApprovedAmount" ColumnName="ApprovedAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="InsuranceModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="First_Name" ColumnName="First Name" />
+                <ScalarProperty Name="Last_Name" ColumnName="Last Name" />
+                <ScalarProperty Name="Orgl_Stamp" ColumnName="Orgl Stamp" />
+                <ScalarProperty Name="Orgl_User" ColumnName="Orgl User" />
+                <ScalarProperty Name="Updt_Stamp" ColumnName="Updt Stamp" />
+                <ScalarProperty Name="Updt_User" ColumnName="Updt User" />
+                <ScalarProperty Name="Expired" ColumnName="Expired" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

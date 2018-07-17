@@ -1,0 +1,413 @@
+﻿@model  InsuranceClaimRequest.Models.Insurance
+@{
+    ViewBag.Title = "Insurance Claim Request";
+}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    @*<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />  
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />  
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>  
+<script src="~/Scripts/jquery-ui-1.10.0.js"></script>  
+<script src="~/Scripts/i18n/grid.locale-en.js"></script>  
+<script src="~/Scripts/jquery.jqGrid.min.js"></script> 
+
+
+
+
+
+    <script type='text/javascript'>
+
+        $(document).ready(function () {
+            $("#DateOfBirth").datepicker({
+                dateFormat: "dd/MM/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+            $("#ClaimRcvdDate").datepicker({
+                dateFormat: "dd/MM/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+            $("#btnAddRow").click(function () {
+                $("#InsClaimDtlsgrid").jqGrid('addRow', null, []);
+                totalAprvdAmt = 0;
+                var allRowsOnCurrentPage = $('#InsClaimDtlsgrid').jqGrid('getDataIDs');
+                                
+                for (var i = 0; i <= allRowsOnCurrentPage.length; i++)
+                {
+                    totalAprvdAmt += parseFloat($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val());
+                }
+
+                $("#ApprovedTotalAmount").val(totalAprvdAmt);
+            });
+
+           $("#btnSaveClaims").click(function () {         
+
+                var grid = $("#InsClaimDtlsgrid");
+                    var ids = grid.jqGrid('getDataIDs');
+
+                    for (var i = 0; i < ids.length; i++) {
+                        grid.jqGrid('saveRow', ids[i]);
+                    }
+                       });
+        });
+       
+        $(function () {
+         
+            $("#InsClaimDtlsgrid").jqGrid
+            ({
+              
+              
+                colNames: ['Bill Date', 'Claim Item','Claim Amount', 'Emergency', 'Benefit', 'Benefit %', 'Approved Amount'],
+                
+                colModel: [               
+                {
+                    name: "BillDate", editable: true, editrules: { required: true }, search: true
+                },
+                {
+                    name: "ClaimItemDescription", editable: true, editrules: { required: true }, search: true
+                },
+                {
+                    name: "AmountClaimed", editable: true, editrules: { required: true }, search: true,
+                    editoptions: {
+
+                        dataInit: function(element) {
+                            $(element).keypress(function(e){
+                                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                                    return false;
+                                }
+                            });
+                        },
+                        
+                        dataEvents: [
+                      {
+                          type: 'change',
+                          fn: function (e) {                  
+                              var myGrid = $('#InsClaimDtlsgrid'),
+                                  selectedRowId = myGrid.jqGrid('getGridParam', 'selrow')
+                              var claimAmount = e.target.value;
+                              var benefirPerct = $("#" + selectedRowId + "_BenefitAmount").val()
+                              var calcPrice = (claimAmount - (claimAmount * benefirPerct / 100)).toFixed(2);
+                              $("#" + selectedRowId + "_ApprovedAmount").val(calcPrice);
+                          }
+                      }],
+                    }
+                },
+                {
+                    name: "BenefitEmergency", editable: true,width:80,
+                    edittype: 'checkbox', editoptions: { value: "True:False" ,style:"align:center"},
+                    formatter: "checkbox", editrules: { required: true }, search: true, align: "center",
+                    editoptions: {
+                        
+                        dataEvents: [
+                      {
+                          type: 'change',
+                          fn: function (e) {
+                              
+                              var myGrid = $('#InsClaimDtlsgrid'),
+                                selectedRowId = myGrid.jqGrid('getGridParam', 'selrow'),
+                                BType = $("#" + selectedRowId + "_Benefit option:selected").val();
+                               
+                              if (null != BType) {
+                                  $.ajax({
+                                      type: "POST",
+                                      url: "/Claims/GetBenefitPerct/",
+                                      data: {
+                                          BenefitTyp: BType,
+                                          EmergencyBenefit: e.target.checked
+
+                                      },
+                                      success: function (response) {
+                                          var myGrid = $('#InsClaimDtlsgrid');
+                                          selectedRowId = myGrid.jqGrid('getGridParam', 'selrow');
+
+                                          var controlId = selectedRowId + "_BenefitAmount";
+                                          $("#" + selectedRowId + "_BenefitAmount").val(response.BPT);
+
+                                          var claimAmount = $("#" + selectedRowId + "_AmountClaimed").val()
+                                          var benefirPerct = $("#" + selectedRowId + "_BenefitAmount").val()
+                                          var calcPrice = (claimAmount * benefirPerct / 100).toFixed(2);
+                                          $("#" + selectedRowId + "_ApprovedAmount").val(calcPrice);
+                                      },
+                                  });
+                              }
+                          }
+                      }],
+                    }
+                },
+                {
+                    name: "Benefit", index: "BenefitId", width: 160, editable: true, edittype: "select",
+                    editoptions: {
+                        dataUrl: '/Claims/GetBenefitType',
+                        dataEvents: [
+                      {
+                          type: 'change',
+                          fn: function (e) {
+                              
+                              var myGrid = $('#InsClaimDtlsgrid'),
+                              selectedRowId = myGrid.jqGrid('getGridParam', 'selrow'),
+                              
+                              BEmrgncycellValue = $("#" + selectedRowId + "_BenefitEmergency")[0].checked;
+                              $.ajax({
+                                  type: "POST",
+                                  url: "/Claims/GetBenefitPerct/",
+                                  data: {
+                                      BenefitTyp: e.target.value,
+                                      EmergencyBenefit: BEmrgncycellValue
+
+                                  },
+                                  success: function (response) {
+                                      var myGrid = $('#InsClaimDtlsgrid');
+                                      selectedRowId = myGrid.jqGrid('getGridParam', 'selrow');
+
+                                      var controlId = selectedRowId + "_BenefitAmount";                                    
+                                     
+                                      $("#" + selectedRowId + "_BenefitAmount").val(response.BPT);
+                                      
+                                      var claimAmount = $("#" + selectedRowId + "_AmountClaimed").val()
+                                      var benefirPerct = $("#" + selectedRowId + "_BenefitAmount").val()
+                                      var calcPrice =  (claimAmount * benefirPerct / 100).toFixed(2);
+                                      $("#" + selectedRowId + "_ApprovedAmount").val(calcPrice);
+                                  },
+                              });
+                          }
+                      }],
+                        style: "width: 140px",
+                        buildSelect: function (response)
+                        {
+                         var data = typeof response === "string" ? $.parseJSON(response) : response;
+                         var s = "<select>";
+                             s += '<option value="0"></option>';
+                             $.each(data, function (i)
+                             {
+                                 s += '<option value="' + data[i].BenefitID + '">' + data[i].BenefitName + '</option>';
+                             })
+                          return s + '</select>';
+                        }},
+                    editrules: { required: true }, search: true, align: "center"
+                },
+                {
+                    name: "BenefitAmount", editable: true, width: 80, editrules: { required: true }, search: true,
+
+                    editoptions: {
+                       
+                        dataInit: function(element) {
+                          
+                            $(element).keyup(function () {
+                                var val1 = element.value;
+                                var num = new Number(val1);
+                                if (isNaN(num) || num<0 || num>100)
+                                { alert("Please enter a valid number and Percentage should be in the range of 1 to 100");
+                                element.value = null;
+                            }
+                            })
+                        },
+                        dataEvents: [
+                      {
+                          type: 'change',
+                          fn: function (e) {
+                              var myGrid = $('#InsClaimDtlsgrid'),
+                                  selectedRowId = myGrid.jqGrid('getGridParam', 'selrow')
+                              var benefirPerct = e.target.value;
+                              var claimAmount = $("#" + selectedRowId + "_AmountClaimed").val()
+                              var calcPrice =  (claimAmount * benefirPerct / 100).toFixed(2);
+                              $("#" + selectedRowId + "_ApprovedAmount").val(calcPrice);
+
+                          }
+                      }],
+                    }
+                },
+                {
+                    name: "ApprovedAmount", editable: true, width: 100, editrules: { required: true }, search: true,
+                    editoptions: {
+
+                        dataInit: function(element) {
+                            $(element).keypress(function(e){
+                                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                                    return false;
+                                }
+                            })
+                        },
+                       
+                    }
+                    }
+                ],
+                
+                height: '100%',
+                rowNum: 10,
+                pager: jQuery('#pager'),
+                rowList: [10, 20, 30, 40],
+                rownumbers: true,   
+                viewrecords: true,
+                caption: 'Insurance Claim Details',
+                emptyrecords: 'No records',
+                jsonReader:
+                {
+                    root: "rows",
+                    page: "page",
+                    total: "total",
+                    records: "records",
+                    repeatitems: false,
+                    Id: "0"
+                },
+                autowidth: true
+            }).navGrid('#jqControls',
+            {
+                edit: true,
+                add: true,
+                del: true,
+                search: false,
+                refresh: true,
+                closeAfterSearch: true
+            },
+
+           
+            {
+               
+                zIndex: 100,
+                closeOnEscape: true,
+                closeAfterAdd: true,
+                afterComplete: function (response) {                    
+                    if (response.responseJSON) {
+                        if (response.responseJSON == "Saved Successfully") {
+                            alert("Saved Successfully");
+                        }
+                        else {
+                            var message = "";
+                            for (var i = 0; i < response.responseJSON.length; i++) {
+                                message += response.responseJSON[i];
+                                message += "\n";
+                            }
+                        }
+
+                    }
+                }
+            },
+            {
+                // delete option
+                zIndex: 100,
+                url: "/Claims/DeleteClaimLineItem",
+                closeOnEscape: true,
+                closeAfterDelete: true,
+                recreateForm: true,
+                msg: "Are you sure you want to delete this Line Item?",
+                afterComplete: function (response) {
+                    if (response.responseText) {
+                        alert(response.responseText);
+                    }
+                }
+            }
+
+            );
+        });
+        function CalculateAprvdAmt(e) {
+            var myGrid = $('#InsClaimDtlsgrid'),
+            selectedRowId = myGrid.jqGrid('getGridParam', 'selrow')
+            var benefirPerct = e.target.value;
+            var claimAmount = $("#" + selectedRowId + "_AmountClaimed").val()
+            var calcPrice = (claimAmount - (claimAmount * benefirPerct / 100)).toFixed(2);
+            $("#" + selectedRowId + "_ApprovedAmount").val(calcPrice);
+
+        };
+        
+        $("#allownumericwithdecimal").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+    <style type="text/css">
+        .ins-margin {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel panel-primary">
+       
+        <div class="panel-heading">Insurance Claims Header</div>
+        <div class="panel-body" style="height: 180px">
+            <div class="ins-margin">
+                <form>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.InsurerId)
+                                @Html.TextBoxFor(m => m.InsurerId, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.InsurerName)
+                                @Html.TextBoxFor(m => m.InsurerName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.DateOfBirth)
+                                @Html.EditorFor(m => m.DateOfBirth, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                                @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ClaimReceivedDate)
+                                @Html.EditorFor(m => m.ClaimReceivedDate, new { htmlAttributes = new { @class = "form-control", @readonly = "true"}, })
+                                @Html.ValidationMessageFor(m => m.ClaimReceivedDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            @Html.LabelFor(m => m.ApprovedTotalAmount)
+                            @Html.TextBoxFor(m => m.ApprovedTotalAmount)
+
+                        </div>
+
+                        <div class="col-xs-3">
+                            @Html.LabelFor(m => m.ApprovedOverrideAmount)
+                            @Html.TextBoxFor(m => m.ApprovedOverrideAmount, new { @class = "allownumericwithdecimal" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+       
+
+    </div>
+     <div class="panel panel-primary">
+        <div class="panel-heading">Insurance Claims Details</div>
+          <div class="ins-margin">
+         <div class="row">
+             <div class="col-xs-12">
+          <table id="InsClaimDtlsgrid"></table>
+                 </div>
+             </div><br />
+              <div class="row">
+           <div class="col-xs-12" style="text-align:right">
+              <input type="button" id="btnAddRow" value="Add Row" class="btn btn-info"  />
+               <input type="button" id="btnSaveClaims" value="Save" class="btn btn-info"  />
+               </div>
+         </div>
+              </div>
+     </div>
+
+
+</body>
+
+
