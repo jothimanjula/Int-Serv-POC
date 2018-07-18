@@ -26,8 +26,27 @@ namespace InsuranceClaimRequest.Models
         public string InsurerName { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]  
-        public System.DateTime? DateOfBirth { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]
+         private DateTime _DOB = DateTime.Now;
+
+        public System.DateTime DOB
+         {
+             get
+             {
+                 return (_DOB == DateTime.Now) ? DateTime.Now : _DOB;
+             }
+             set
+             {
+                 _DOB = value;
+
+             }
+         }
+
+         [Required]
+         [Display(Name = "Date Of Birth")]
+         [DataType(DataType.Date)]
+         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]
+         public System.DateTime? DateOfBirth {get; set; }
 
         [Required]
         [Display(Name = "Claim Received Date")]
