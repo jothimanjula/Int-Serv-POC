@@ -81,6 +81,9 @@
                     datefmt: 'mm/dd/Y HH:MM',
                     editable: true,
                     edittype: "text",
+                    onCellSelect: function () {
+                        alert('Bill Date claimed cell clicked');
+                    },
                     editoptions: {
                         dataInit: function (el) {
                             $(el).datepicker({
@@ -102,7 +105,10 @@
                 {
                     name: "AmountClaimed", editable: true, editrules: { required: true }, search: true,
                     editoptions: {
-
+                        onCellSelect:function()
+                        {
+                            alert('Amount claimed cell clicked');
+                        },
                         dataInit: function(element) {
                             $(element).keypress(function(e){
                                 if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -416,7 +422,8 @@
           <div class="ins-margin">
          <div class="row">
              <div class="col-xs-12">
-          <table id="InsClaimDtlsgrid"></table>
+          @*<table id="InsClaimDtlsgrid"></table>*@
+                 @Html.Partial("GridPartial")
                  </div>
              </div><br />
               <div class="row">
