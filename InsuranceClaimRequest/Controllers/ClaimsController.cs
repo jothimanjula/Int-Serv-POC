@@ -8,18 +8,37 @@ using System.Web.Mvc;
 
 namespace InsuranceClaimRequest.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ClaimsController : Controller
     {
         InsuranceClaimEntites ie = new InsuranceClaimEntites();
         
         public ActionResult Index()
         {
-            //return View(ie.Insurances.ToList());
-            Insurance objIns = new Insurance();
-            return View(objIns);
+            
+            
+            List<InsuranceLineItem> ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed= 0, ClaimItemDescription = "" } };
+            return View(ci);
         }
-        
+        public ActionResult BulkData(List<InsuranceLineItem> ci)
+        {
+            if (ModelState.IsValid)
+            {
+                using (InsuranceClaimEntites dc = new InsuranceClaimEntites())
+                {
+                    foreach (var i in ci)
+                    {
+                        dc.InsuranceLineItems.Add(i);
+                    }
+                    dc.SaveChanges();
+                    ViewBag.Message = "Data successfully saved!";
+                    ModelState.Clear();
+                    ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed = 0, ClaimItemDescription = "" } };
+                }
+            }
+            return View(ci);
+        }
+
         public JsonResult GetCustomers(string sord, int page, int rows, string searchString)
         {
             // Create Instance of DatabaseContext class for Accessing Database.

@@ -1,39 +1,54 @@
 ﻿
 @*@model IEnumerable<InsuranceClaimRequest.Models.InsuranceLineItem>*@
+@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
 
-@using GridMvc.Html
-@{
-    ViewBag.Title = "Details";
-}
-@{
-    Layout = null;
-}
-
-
-
-<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
-<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
-<script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")"></script>
-<script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
-
-
-
-<div class="container">
-
-    <h3> Scheme Details</h3>
-
-    @Html.Grid<InsuranceClaimRequest.Models.InsuranceLineItem>().Columns(columns =>
-                    {
-                        columns.Add(c=>c.BillDate).Titled("Bill Date").Filterable(true);
-                        columns.Add(c=>c.ClaimItemDescription).Titled("Description").Filterable(true);
-                        columns.Add(c => c.AmountClaimed).Titled("Claim Amount").Filterable(true);
-                        columns.Add(c => c.BenefitAmount).Titled("Description").Filterable(true);
-                        columns.Add(c => c.BenefitId).Titled("Description").Filterable(true);
-                        columns.Add()
-                        .Encoded(false)
-                        .Sanitized(false)
-                        .SetWidth(30)
-                        .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = o.InsurerId }));
+ @using (Html.BeginForm("Save","Claims", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        
+        if (ViewBag.Message != null)
+        {
+            <div style="border:solid 1px green">
+                @ViewBag.Message
+            </div>
+        }
+        
+        <div><a href="#" id="addNew">Add New</a></div>
+        <table id="dataTable" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+               <th>Claim Amount</th>
+                <th>Claim Description</th>
+                <th></th>
+            </tr>
+            @if (Model != null && Model.Count > 0)
+	        {
+                int j = 0;
+                foreach (var i in Model)
+                {
+                    <tr style="border:1px solid black">
+                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control" } })</td> 
+                        <td>@Html.TextBoxFor(a=>a[j].AmountClaimed)</td>
+                        <td>@Html.TextBoxFor(a=>a[j].ClaimItemDescription)</td>
+                        <td>@Html.DropDownListFor(a=>a[j].BenefitId)</td>
+                       
+                       
                         
-                    }).WithPaging(10).Sortable(false)
-</div>
+                         <td>  
+                          @if (j > 0)
+                            {
+                                <a href="#" id="aRmv" class="remove">Remove</a>
+                                // <input type="button" name="btnRemoveRow" id="btnRemoveRow" value="Remove" class="btn btn-info"  />
+                            }
+                        </td>
+                    </tr>
+                    j++;
+                }
+	        }
+        </table>
+        <input type="submit" value="Save Bulk Data" />
+    }
+
+
+@* Here I will add Jquery Code for validation / dynamically add new rows / Remove rows etc *@
+

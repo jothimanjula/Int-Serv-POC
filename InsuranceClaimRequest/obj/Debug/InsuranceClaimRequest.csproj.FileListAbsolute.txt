@@ -55,3 +55,9 @@ C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceC
 C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\obj\Debug\InsuranceClaimRequest.dll
 C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\obj\Debug\InsuranceClaimRequest.pdb
 C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\GridMvc.dll
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\Antlr3.Runtime.dll
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\System.Web.Optimization.dll
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\WebGrease.dll
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\Antlr3.Runtime.pdb
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\Newtonsoft.Json.xml
+C:\Users\muralib\Desktop\Important\InsuranceClaimRequest\Int-Serv-POC\InsuranceClaimRequest\bin\System.Web.Optimization.xml
