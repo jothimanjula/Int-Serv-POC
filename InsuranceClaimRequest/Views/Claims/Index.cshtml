@@ -1,191 +1,139 @@
-﻿@*@model  InsuranceClaimRequest.Models.Insurance
-@{
-    ViewBag.Title = "Insurance Claim Request";
-}*@
-
-<head>
-    @*<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />*@ 
+﻿<head>    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    @*<script src="~/Scripts/bootstrap.js"></script>*@
     <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />  
-    <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
-    
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    
-  @*   <script type="text/javascript" src="~/Scripts/jquery.validate-vsdoc.js"></script>*@
-        @*<script type="text/javascript" src="~/Scripts/jquery-migrate-3.0.0.js"></script>*@
-     
-    <!--<script src="~/Scripts/jquery-1.10.2.min.js"></script>  
-    <script src="~/Scripts/jquery-ui-1.10.0.js"></script>  -->
- @*   <script src="~/Scripts/i18n/grid.locale-en.js"></script>  
-    <script src="~/Scripts/jquery.jqGrid.min.js"></script> *@
-   
-
-
-     <style type="text/css">
-
+    <style type="text/css">
          table.blueTable {
-  border: 1px solid #1C6EA4;
-  background-color: #EEEEEE;
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-}
-table.blueTable td, table.blueTable th {
-  border: 1px solid #AAAAAA;
-  padding: 3px 2px;
-}
-table.blueTable tbody td {
-  font-size: 13px;
-}
-table.blueTable tr:nth-child(even) {
-  background: #D0E4F5;
-}
-table.blueTable thead {
-  background: #1C6EA4;
-  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-  background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-  border-bottom: 2px solid #444444;
-}
-table.blueTable thead th {
-  font-size: 15px;
-  font-weight: bold;
-  color: #FFFFFF;
-  border-left: 2px solid #D0E4F5;
-}
-table.blueTable thead th:first-child {
-  border-left: none;
-}
+          border: 1px solid #1C6EA4;
+          background-color: #EEEEEE;
+          width: 100%;
+          text-align: left;
+          border-collapse: collapse;
+        }
+        table.blueTable td, table.blueTable th {
+          border: 1px solid #AAAAAA;
+          padding: 3px 2px;
+        }
+        table.blueTable tbody td {
+          font-size: 13px;
+        }
+        table.blueTable tr:nth-child(even) {
+          background: #D0E4F5;
+        }
+        table.blueTable thead {
+          background: #1C6EA4;
+          background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          border-bottom: 2px solid #444444;
+        }
+        table.blueTable thead th {
+          font-size: 15px;
+          font-weight: bold;
+          color: #FFFFFF;
+          border-left: 2px solid #D0E4F5;
+        }
+        table.blueTable thead th:first-child {
+          border-left: none;
+        }
 
-table.blueTable tfoot {
-  font-size: 14px;
-  font-weight: bold;
-  color: #FFFFFF;
-  background: #D0E4F5;
-  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-  border-top: 2px solid #444444;
-}
-table.blueTable tfoot td {
-  font-size: 14px;
-}
-table.blueTable tfoot .links {
-  text-align: right;
-}
-table.blueTable tfoot .links a{
-  display: inline-block;
-  background: #1C6EA4;
-  color: #FFFFFF;
-  padding: 2px 8px;
-  border-radius: 5px;
-}
-
+        table.blueTable tfoot {
+          font-size: 14px;
+          font-weight: bold;
+          color: #FFFFFF;
+          background: #D0E4F5;
+          background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+          background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+          background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+          border-top: 2px solid #444444;
+        }
+        table.blueTable tfoot td {
+          font-size: 14px;
+        }
+        table.blueTable tfoot .links {
+          text-align: right;
+        }
+        table.blueTable tfoot .links a{
+          display: inline-block;
+          background: #1C6EA4;
+          color: #FFFFFF;
+          padding: 2px 8px;
+          border-radius: 5px;
+        }
         .ins-margin {
             margin: 20px;
         }
+        .form-control {
+            width:200px;
+            text-transform:uppercase;
+         }
     </style>
 </head>
-
-    <div class="panel panel-primary">
-       
-        <div class="panel-heading">Insurance Claims Header</div>
+<div class="panel panel-primary">       
+    <div class="panel-heading">Insurance Claims Header</div>
         <div class="panel-body" style="height: 180px">
             <div class="ins-margin">
                 <form>
                     <div class="row">
                         <div class="col-xs-3">
                             <div class="form-group">
-                               @* @Html.LabelFor(m => m.InsurerId)
-                                @Html.TextBoxFor(m => m.InsurerId, new { @class = "form-control" })*@
-
-
-                                @Html.Label("Insurer Id")
-                                 @Html.TextBox("InsurerId", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 10 })
+                                 @Html.Label("Insurer Id")
+                                 @Html.TextBox("InsurerId", null, new { @class = "form-control", maxlength = 10 })
                             </div>
                         </div>
                         <div class="col-xs-3">
                             <div class="form-group">
-                                @Html.Label("Insurer Name")
-                                 @Html.TextBox("InsurerName", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 50 })
-                           
-                               @* @Html.LabelFor(m => m.InsurerName)
-                                @Html.TextBoxFor(m => m.InsurerName, new { @class = "form-control" })*@
-                            </div>
+                                 @Html.Label("Insurer Name")
+                                 @Html.TextBox("InsurerName", null, new { @class = "form-control", maxlength = 50 })
+                           </div>
                         </div>
                         <div class="col-xs-3">
                             <div class="form-group">
-                                @*@Html.LabelFor(m => m.DateOfBirth)
-                                @Html.EditorFor(m => m.DateOfBirth, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
-                                @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
-                            *@
-
                                  @Html.Label("Date of Birth")
-                                 @Html.Editor("DateOfBirth", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 10 })
-                           
+                                 @Html.TextBox("DateOfBirth","{0:yyyy-MM-dd}", new { @class = "form-control", maxlength = 10, type = "date" })
                             </div>
                         </div>
                         <div class="col-xs-3">
                             <div class="form-group">
-                                @*@Html.LabelFor(m => m.ClaimReceivedDate)
-                                @Html.EditorFor(m => m.ClaimReceivedDate, new { htmlAttributes = new { @class = "form-control", @readonly = "true"} })
-                                @Html.ValidationMessageFor(m => m.ClaimReceivedDate, "", new { @class = "text-danger" })*@
-                            
-                             @Html.Label("Claim Received Date")
-                                 @Html.Editor("ClaimReceivedDate", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 10 })
-                           
+                                 @Html.Label("Claim Received Date")
+                                 @Html.TextBox("ClaimReceivedDate","{0:yyyy-MM-dd}", new { @class = "form-control", maxlength = 10, type = "date" })                           
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-3">
-
-                              @Html.Label("Approved Total Amount")
-                                 @Html.TextBox("ApprovedTotalAmount", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 10 })
-                           
-                           @* @Html.LabelFor(m => m.ApprovedTotalAmount)
-                            @Html.TextBoxFor(m => m.ApprovedTotalAmount)*@
-
-                        </div>
-
-                        <div class="col-xs-3">
-                            
-                              @Html.Label("Approved Override Amount")
-                                 @Html.TextBox("ApprovedOverrideAmount", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 10 })
-                           
-                           @* @Html.LabelFor(m => m.ApprovedOverrideAmount)
-                            @Html.TextBoxFor(m => m.ApprovedOverrideAmount, new { @class = "allownumericwithdecimal" })*@
-                        </div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        @Html.Label("Approved Total Amount")
+                        @Html.TextBox("ApprovedTotalAmount", null, new { @class = "form-control", maxlength = 10 })
                     </div>
-                </form>
-            </div>
+                    <div class="col-xs-3">                            
+                        @Html.Label("Approved Override Amount")
+                        @Html.TextBox("ApprovedOverrideAmount", null, new { @class = "form-control", maxlength = 10 })                        
+                    </div>
+                </div>
+            </form>
         </div>
-
-       
-
     </div>
-     <div class="panel panel-primary">
-        <div class="panel-heading">Insurance Claims Details</div>
-          <div class="ins-margin">
-         <div class="row">
-             <div class="col-xs-12">
-          @*<table id="InsClaimDtlsgrid"></table>*@
-                 @Html.Partial("GridPartial")
-                 </div>
-             </div><br />
-              <div class="row">
-           <div class="col-xs-12" style="text-align:right">
-              @*<input type="button" id="btnAddRow" value="Add Row" class="btn btn-info"  />*@
-               <input type="button" id="btnSaveClaims" value="Save" class="btn btn-info"  />
-               </div>
-         </div>
-              </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Insurance Claims Details</div>
+        <div class="ins-margin">
+        <div class="row">
+            <div class="col-xs-12">          
+                @Html.Partial("GridPartial")
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-xs-12" style="text-align:right">             
+                        <input type="button" id="btnSaveClaims" value="Save" class="btn btn-info"  />
+                </div>
+            </div>
      </div>
+</div>
 
 
 

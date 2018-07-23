@@ -11,12 +11,18 @@ namespace InsuranceClaimRequest.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    
     
     public partial class InsuranceLineItem
     {
         public int InsurerLineItemId { get; set; }
         public string InsurerId { get; set; }
-        public System.DateTime BillDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime BillDate { get; set; }
+
         public string ClaimItemDescription { get; set; }
         public decimal AmountClaimed { get; set; }
         public bool BenefitEmergency { get; set; }

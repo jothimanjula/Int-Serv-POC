@@ -1,8 +1,5 @@
-﻿
-@*@model IEnumerable<InsuranceClaimRequest.Models.InsuranceLineItem>*@
-@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
-
- @using (Html.BeginForm("Save","Claims", FormMethod.Post))
+﻿@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
+@using (Html.BeginForm("Save","Claims", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -23,7 +20,7 @@
                  <th>Claim Amount</th>
                 <th>Emergency</th>
                 <th>Benefit</th>
-                <th>Benefit %</th>
+                <th>Benefit Percentage</th>
                 <th>Approved Amount</th>
                 <th></th>
             </tr></thead>
@@ -34,9 +31,9 @@
                 foreach (var i in Model)
                 {
                     <tr style="border:1px solid black">
-                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control" } })</td> 
+                        <td>@Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new { @class = "datepicker", type = "date" } })</td>                        
                         <td>@Html.TextBoxFor(a=>a[j].ClaimItemDescription)</td>
-                         <td>@Html.TextBoxFor(a=>a[j].AmountClaimed)</td>
+                        <td>@Html.TextBoxFor(a=>a[j].AmountClaimed)</td>
                         <td>@Html.CheckBoxFor(a => a[j].BenefitEmergency)</td>
                         <td>@Html.DropDownListFor(a=>a[j].BenefitId, new SelectList(
                                        new List<Object>{ 
@@ -44,26 +41,23 @@
                                        new { value = "PD", text = "Prescription Drugs" },
                                        new { value = "SR" , text = "Surgery"}
                                },
-                  "value",
-                  "text",
-                   2))</td>
-                        <td>@Html.TextBoxFor(a=>a[j].BenefitAmount)</td>
-                         <td>@Html.TextBoxFor(a=>a[j].ApprovedAmount)</td>
-                       
-                       
-                        
+                              "value",
+                              "text",
+                               2))</td>
+                         <td>@Html.TextBoxFor(a=>a[j].BenefitAmount)</td>
+                         <td>@Html.TextBoxFor(a=>a[j].ApprovedAmount)</td>                        
                          <td>  
-                          @if (j > 0)
-                            {
-                                <a href="#" id="aRmv" class="remove">Remove</a>
-                                // <input type="button" name="btnRemoveRow" id="btnRemoveRow" value="Remove" class="btn btn-info"  />
-                            }
+                              @if (j > 0)
+                                {
+                                    <a href="#" id="aRmv" class="remove">Remove</a>
+                                    // <input type="button" name="btnRemoveRow" id="btnRemoveRow" value="Remove" class="btn btn-info"  />
+                                }
                         </td>
                     </tr>
                     j++;
                 }
 	        }
-                </tbody>
+           </tbody>
         </table>
         <input type="submit" value="Save Bulk Data" />
     }
