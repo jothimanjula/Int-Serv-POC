@@ -13,8 +13,8 @@
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />  
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
     
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>*@
     
   @*   <script type="text/javascript" src="~/Scripts/jquery.validate-vsdoc.js"></script>*@
         @*<script type="text/javascript" src="~/Scripts/jquery-migrate-3.0.0.js"></script>*@
@@ -113,7 +113,7 @@ table.blueTable tfoot .links a{
                             <div class="form-group">
                                 @Html.Label("Insurer Name")
                                  @Html.TextBox("InsurerName", null, new { style = "width:105px;text-transform:uppercase;", maxlength = 50 })
-                           
+                          
                                @* @Html.LabelFor(m => m.InsurerName)
                                 @Html.TextBoxFor(m => m.InsurerName, new { @class = "form-control" })*@
                             </div>
@@ -194,11 +194,11 @@ table.blueTable tfoot .links a{
 
    @section Scripts
        {
-      
+     
+
     @Scripts.Render("~/bundles/jqueryval")
    
-   
-
+     
     <script type='text/javascript'>
        
        
@@ -206,13 +206,13 @@ table.blueTable tfoot .links a{
 
             $("#addNew").click(function (e) {
                 
-                e.preventDefault();
+                e.preventDefault();debugger
                 var $tableBody = $("#dataTable");
                 var $trLast = $tableBody.find("tr:last");
                 var $trNew = $trLast.clone();
-
+                $trNew.find('input').val('');
                 var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
-                $trNew.find("td:last").html('<a href="#" class="remove">Remove</a>');
+              //  $trNew.find("td:last").html('<a href="#" class="remove">Remove</a>');
                 // $trNew.find("td:last").html(' <input type="button" name="btnRemoveRow"  id="btnRemoveRow" value="Remove" class="btn btn-info"  />');
                 $.each($trNew.find(':input'), function (i, val) {
                     // Replaced Name
@@ -250,42 +250,42 @@ table.blueTable tfoot .links a{
                 
                
                 });
-                $("#DOB").datepicker({
-                    dateFormat: "dd/MM/yy",
-                    changeMonth: true,
-                    changeYear: true,
-                    yearRange: "-60:+0"
-                });
-                $("#ClaimRecvdDate").datepicker({
-                    dateFormat: "dd/MM/yy",
-                    changeMonth: true,
-                    changeYear: true,
-                    yearRange: "-60:+0"
-                });
-                $("#btnAddRow").click(function () {
-                    $("#InsClaimDtlsgrid").jqGrid('addRow', null, []);
-                    totalAprvdAmt = 0;
-                    var allRowsOnCurrentPage = $('#InsClaimDtlsgrid').jqGrid('getDataIDs');
+                //$("#DOB").datepicker({
+                //    dateFormat: "dd/MM/yy",
+                //    changeMonth: true,
+                //    changeYear: true,
+                //    yearRange: "-60:+0"
+                //});
+                //$("#ClaimRecvdDate").datepicker({
+                //    dateFormat: "dd/MM/yy",
+                //    changeMonth: true,
+                //    changeYear: true,
+                //    yearRange: "-60:+0"
+                //});
+                //$("#btnAddRow").click(function () {
+                //    $("#InsClaimDtlsgrid").jqGrid('addRow', null, []);
+                //    totalAprvdAmt = 0;
+                //    var allRowsOnCurrentPage = $('#InsClaimDtlsgrid').jqGrid('getDataIDs');
                                 
-                    for (var i = 0; i <= allRowsOnCurrentPage.length; i++)
-                    {                    
-                        if ($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != "" && $("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != null) {
-                            totalAprvdAmt += parseFloat($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val());
-                        }
-                    }
+                //    for (var i = 0; i <= allRowsOnCurrentPage.length; i++)
+                //    {                    
+                //        if ($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != "" && $("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != null) {
+                //            totalAprvdAmt += parseFloat($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val());
+                //        }
+                //    }
 
-                    $("#ApprovedTotalAmount").val(totalAprvdAmt.toFixed(2));
-                });
+                //    $("#ApprovedTotalAmount").val(totalAprvdAmt.toFixed(2));
+                //});
 
-                $("#btnSaveClaims").click(function () {         
+                //$("#btnSaveClaims").click(function () {         
 
-                    var grid = $("#InsClaimDtlsgrid");
-                    var ids = grid.jqGrid('getDataIDs');
+                //    var grid = $("#InsClaimDtlsgrid");
+                //    var ids = grid.jqGrid('getDataIDs');
 
-                    for (var i = 0; i < ids.length; i++) {
-                        grid.jqGrid('saveRow', ids[i]);
-                    }
-                });
+                //    for (var i = 0; i < ids.length; i++) {
+                //        grid.jqGrid('saveRow', ids[i]);
+                //    }
+                //});
             });
             $(function () {
                 jQuery.event.handle = jQuery.event.dispatch

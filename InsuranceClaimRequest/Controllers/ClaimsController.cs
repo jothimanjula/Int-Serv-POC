@@ -20,7 +20,9 @@ namespace InsuranceClaimRequest.Controllers
             List<InsuranceLineItem> ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed= 0, ClaimItemDescription = "" } };
             return View(ci);
         }
-        public ActionResult BulkData(List<InsuranceLineItem> ci)
+
+        [HttpPost]
+        public ActionResult Save(List<InsuranceLineItem> ci)
         {
             if (ModelState.IsValid)
             {
@@ -36,7 +38,7 @@ namespace InsuranceClaimRequest.Controllers
                     ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed = 0, ClaimItemDescription = "" } };
                 }
             }
-            return View(ci);
+            return View("Index", ci);
         }
 
         public JsonResult GetCustomers(string sord, int page, int rows, string searchString)

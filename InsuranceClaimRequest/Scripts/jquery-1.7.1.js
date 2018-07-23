@@ -5464,7 +5464,7 @@ jQuery.fn.extend({
 			jQuery.unique( all ) );
 	},
 
-	andSelf: function() {
+	addBack : function() {
 		return this.add( this.prevObject );
 	}
 });

@@ -4,9 +4,9 @@
 
  @using (Html.BeginForm("Save","Claims", FormMethod.Post))
     {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        
+     
+     
+       
         if (ViewBag.Message != null)
         {
             <div style="border:solid 1px green">
@@ -34,11 +34,17 @@
                 foreach (var i in Model)
                 {
                     <tr style="border:1px solid black">
-                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control" } })</td> 
-                        <td>@Html.TextBoxFor(a=>a[j].ClaimItemDescription)</td>
-                         <td>@Html.TextBoxFor(a=>a[j].AmountClaimed)</td>
+                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control" } })
+                              @Html.ValidationMessageFor(a => a[j].BillDate)
+                        </td> 
+                        <td>@Html.TextBoxFor(a=>a[j].ClaimItemDescription)
+                            @Html.ValidationMessageFor(a => a[j].ClaimItemDescription)
+                        </td>
+                         <td>@Html.TextBoxFor(a=>a[j].AmountClaimed)
+                              @Html.ValidationMessageFor(a => a[j].AmountClaimed)
+                         </td>
                         <td>@Html.CheckBoxFor(a => a[j].BenefitEmergency)</td>
-                        <td>@Html.DropDownListFor(a=>a[j].BenefitId, new SelectList(
+                        <td>@Html.DropDownListFor(a=>a[j].Benefit.BenefitName, new SelectList(
                                        new List<Object>{ 
                                        new { value = "HR" , text = "Hospital Room"  },
                                        new { value = "PD", text = "Prescription Drugs" },
@@ -46,19 +52,23 @@
                                },
                   "value",
                   "text",
-                   2))</td>
-                        <td>@Html.TextBoxFor(a=>a[j].BenefitAmount)</td>
-                         <td>@Html.TextBoxFor(a=>a[j].ApprovedAmount)</td>
+                   2)) @Html.ValidationMessageFor(a => a[j].Benefit.BenefitName)</td>
+                        <td>@Html.TextBoxFor(a=>a[j].BenefitAmount)
+                            @Html.ValidationMessageFor(a => a[j].BenefitAmount)
+                        </td>
+                         <td>@Html.TextBoxFor(a=>a[j].ApprovedAmount)
+                              @Html.ValidationMessageFor(a => a[j].ApprovedAmount)
+                         </td>
                        
                        
                         
-                         <td>  
+                        @* <td>  
                           @if (j > 0)
                             {
                                 <a href="#" id="aRmv" class="remove">Remove</a>
                                 // <input type="button" name="btnRemoveRow" id="btnRemoveRow" value="Remove" class="btn btn-info"  />
                             }
-                        </td>
+                        </td>*@
                     </tr>
                     j++;
                 }

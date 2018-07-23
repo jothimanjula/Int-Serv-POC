@@ -38,19 +38,36 @@
         return value;
     }
 
+    //function onError(error, inputElement) {  // 'this' is the form element
+    //    var container = $(this).find("[data-valmsg-for='" + escapeAttributeValue(inputElement[0].name) + "']"),
+    //        replace = $.parseJSON(container.attr("data-valmsg-replace")) !== false;
+
+    //    container.removeClass("field-validation-valid").addClass("field-validation-error");
+    //    error.data("unobtrusiveContainer", container);
+
+    //    if (replace) {
+    //        container.empty();
+    //        error.removeClass("input-validation-error").appendTo(container);
+    //    }
+    //    else {
+    //        error.hide();
+    //    }
+    //}
+
     function onError(error, inputElement) {  // 'this' is the form element
-        var container = $(this).find("[data-valmsg-for='" + escapeAttributeValue(inputElement[0].name) + "']"),
-            replace = $.parseJSON(container.attr("data-valmsg-replace")) !== false;
+        var container = $(this).find("[data-valmsg-for='" + inputElement[0].name + "']");
+        if (container.length > 0) {
+            var replace = $.parseJSON(container.attr("data-valmsg-replace")) !== false; //JK
+            container.removeClass("field-validation-valid").addClass("field-validation-error");
+            error.data("unobtrusiveContainer", container);
 
-        container.removeClass("field-validation-valid").addClass("field-validation-error");
-        error.data("unobtrusiveContainer", container);
-
-        if (replace) {
-            container.empty();
-            error.removeClass("input-validation-error").appendTo(container);
-        }
-        else {
-            error.hide();
+            if (replace) {
+                container.empty();
+                error.removeClass("input-validation-error").appendTo(container);
+            }
+            else {
+                error.hide();
+            }
         }
     }
 
@@ -68,11 +85,25 @@
         }
     }
 
+    //function onSuccess(error) {  // 'this' is the form element
+    //    var container = error.data("unobtrusiveContainer"),
+    //        replace = $.parseJSON(container.attr("data-valmsg-replace"));
+
+    //    if (container) {
+    //        container.addClass("field-validation-valid").removeClass("field-validation-error");
+    //        error.removeData("unobtrusiveContainer");
+
+    //        if (replace) {
+    //            container.empty();
+    //        }
+    //    }
+    //}
+
     function onSuccess(error) {  // 'this' is the form element
-        var container = error.data("unobtrusiveContainer"),
-            replace = $.parseJSON(container.attr("data-valmsg-replace"));
+        var container = error.data("unobtrusiveContainer");
 
         if (container) {
+            var replace = $.parseJSON(container.attr("data-valmsg-replace")); //JK
             container.addClass("field-validation-valid").removeClass("field-validation-error");
             error.removeData("unobtrusiveContainer");
 
@@ -192,7 +223,7 @@
             /// <param name="selector" type="String">Any valid jQuery selector.</param>
             var $forms = $(selector)
                 .parents("form")
-                .andSelf()
+                .addBack()
                 .add($(selector).find("form"))
                 .filter("form");
 
