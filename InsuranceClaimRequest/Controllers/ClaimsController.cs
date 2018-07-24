@@ -17,12 +17,18 @@ namespace InsuranceClaimRequest.Controllers
         {
             
             
-            List<InsuranceLineItem> ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed= 0, ClaimItemDescription = "" } };
+           List<InsuranceLineItem> ci = new List<InsuranceLineItem> 
+                                           { new InsuranceLineItem
+                                             { InsurerId = "", 
+                                                 ClaimItemDescription = "",
+                                                 BillDate=null} };
+
+           
             return View(ci);
         }
 
         [HttpPost]
-        public ActionResult Save(List<InsuranceLineItem> ci)
+        public ActionResult Save(List<InsuranceLineItem> ci,  FormCollection fc)
         {
             if (ModelState.IsValid)
             {

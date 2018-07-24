@@ -1,20 +1,17 @@
-﻿
-@*@model IEnumerable<InsuranceClaimRequest.Models.InsuranceLineItem>*@
-@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
-
- @using (Html.BeginForm("Save","Claims", FormMethod.Post))
+﻿@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
+@*@using (Html.BeginForm("Save","Claims", FormMethod.Post))
     {
      
      
        
-        if (ViewBag.Message != null)
+        @if (ViewBag.Message != null)
         {
             <div style="border:solid 1px green">
                 @ViewBag.Message
             </div>
         }
         
-        <div><a href="#" id="addNew">Add New</a></div>
+        *@<div><a href="#" id="addNew">Add New</a></div>
         <table id="dataTable" border="0" cellpadding="0" cellspacing="0" class="blueTable">
             <thead>
             <tr>
@@ -23,7 +20,7 @@
                  <th>Claim Amount</th>
                 <th>Emergency</th>
                 <th>Benefit</th>
-                <th>Benefit %</th>
+                <th>Benefit Percentage</th>
                 <th>Approved Amount</th>
                 <th></th>
             </tr></thead>
@@ -34,7 +31,7 @@
                 foreach (var i in Model)
                 {
                     <tr style="border:1px solid black">
-                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control" } })
+                        <td> @Html.EditorFor(a=>a[j].BillDate, new { htmlAttributes = new {@class = "form-control", type="date" } })
                               @Html.ValidationMessageFor(a => a[j].BillDate)
                         </td> 
                         <td>@Html.TextBoxFor(a=>a[j].ClaimItemDescription)
@@ -73,10 +70,10 @@
                     j++;
                 }
 	        }
-                </tbody>
+           </tbody>
         </table>
-        <input type="submit" value="Save Bulk Data" />
-    }
+        
+    @*}*@
 
 
 @* Here I will add Jquery Code for validation / dynamically add new rows / Remove rows etc *@
