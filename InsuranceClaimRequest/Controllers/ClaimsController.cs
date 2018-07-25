@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace InsuranceClaimRequest.Controllers
 {
-   // [Authorize]
+    [Authorize]
     public class ClaimsController : Controller
     {
         InsuranceClaimEntites ie = new InsuranceClaimEntites();
@@ -189,14 +189,34 @@ namespace InsuranceClaimRequest.Controllers
         {
             return View(ie.Insurances.ToList());
         }
-
-        public ActionResult ClaimDetails(string InsurerId)
+        [HttpGet]
+        public ActionResult ClaimDetails(string Id)
         {
-
-            var data = ie.InsuranceLineItems.Where(m => m.InsurerId == InsurerId).ToList();
             
-            return PartialView
-                ("ClaimDetailsPartial",data);
+            try
+            {
+                var data = ie.InsuranceLineItems.Where(m => m.InsurerId == Id).ToList();
+                 //var data =
+                 //    from lineItem in ie.InsuranceLineItems
+                 //    join bft in ie.Benefits on lineItem.BenefitId equals bft.BenefitID
+                 //    where lineItem.InsurerId == Id
+                 //    select new InsuranceLineItem
+                 //    {
+                 //        BillDate = lineItem.BillDate,
+                 //        ClaimItemDescription = lineItem.ClaimItemDescription,
+                 //        AmountClaimed = lineItem.AmountClaimed,
+                 //        BenefitEmergency = lineItem.BenefitEmergency,
+                 //        BenefitId = lineItem.BenefitId,
+                 //        BenefitAmount = lineItem.BenefitAmount,
+                 //        ApprovedAmount = lineItem.ApprovedAmount
+
+                 //    };
+               return PartialView("ClaimDetailsPartial", data);
+            }
+            catch (Exception e)
+            { throw e; }
+            
+           
         }
 	}
 }
