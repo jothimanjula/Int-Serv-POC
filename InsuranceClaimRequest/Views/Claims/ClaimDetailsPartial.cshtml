@@ -1,0 +1,61 @@
+﻿@model List<InsuranceClaimRequest.Models.InsuranceLineItem>
+ <div id="divClaimDetails" class="float-bottom">
+<table id="ClaimList" class="table table-bordered table-condensed">
+    @if(Model!=null)
+    {
+    <thead>
+
+        <tr>
+
+            
+
+            <th>Bill Date</th>
+
+            <th>Claim Item</th>
+
+            <th>Amount Claimed</th>
+
+            <th>Emergency</th>
+
+            <th>Benefit Type</th>
+
+            <th>Benefit %</th>
+
+            <th>Approved Amount</th>
+
+                      
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    @foreach (InsuranceClaimRequest.Models.InsuranceLineItem lineItm in Model)
+
+    {
+
+        <tr>
+
+            <td>@lineItm.BillDate</td>
+
+            <td>@lineItm.ClaimItemDescription</td>
+
+            <td>@lineItm.AmountClaimed</td>
+
+            <td>@lineItm.BenefitEmergency</td>
+
+            <td>@lineItm.BenefitAmount</td>
+
+            <td>@lineItm.ApprovedAmount</td>
+           
+
+            
+
+        </tr>
+
+    }
+
+        </tbody>
+    }
+</table>
+     </div>

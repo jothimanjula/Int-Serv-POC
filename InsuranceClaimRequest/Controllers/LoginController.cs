@@ -12,9 +12,6 @@ namespace InsuranceClaimRequest.Controllers
     {
 
         InsuranceClaimEntites usersEntity = new InsuranceClaimEntites();
-        //
-        // GET: /Login/
-
         public ActionResult Index()
         {
             return View();

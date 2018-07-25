@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace InsuranceClaimRequest.Controllers
 {
-    //[Authorize]
+   // [Authorize]
     public class ClaimsController : Controller
     {
         InsuranceClaimEntites ie = new InsuranceClaimEntites();
@@ -27,78 +27,107 @@ namespace InsuranceClaimRequest.Controllers
             return View(ci);
         }
 
+        public ActionResult claimsHome()
+        {
+            return RedirectToAction("SearchClaim");
+        }
+
+        public ActionResult Addclaims()
+        {
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public ActionResult Save(List<InsuranceLineItem> ci,  FormCollection fc)
         {
-            if (ModelState.IsValid)
+            try
             {
-                using (InsuranceClaimEntites dc = new InsuranceClaimEntites())
+                if (ModelState.IsValid)
                 {
-                    foreach (var i in ci)
+                    using (InsuranceClaimEntites dc = new InsuranceClaimEntites())
                     {
-                        dc.InsuranceLineItems.Add(i);
+
+                        Insurance insModel = new Insurance();
+                        insModel.InsurerId = fc["InsurerId"].ToString();
+                        insModel.InsurerName = fc["InsurerName"].ToString();
+                        insModel.DateOfBirth = Convert.ToDateTime(fc["DateOfBirth"].ToString());
+                        insModel.ClaimReceivedDate = fc["ClaimReceivedDate"].ToString();
+                        insModel.ApprovedTotalAmount = fc["ApprovedTotalAmount"] == "" ? 0 : Convert.ToDecimal(fc["ApprovedTotalAmount"]);
+                        insModel.ApprovedOverrideAmount = fc["ApprovedOverrideAmount"] == "" ? 0 : Convert.ToDecimal(fc["ApprovedOverrideAmount"]);
+
+                        dc.Insurances.Add(insModel);
+
+                        foreach (var i in ci)
+                        {
+                            i.InsurerId = fc["InsurerId"].ToString();
+                            dc.InsuranceLineItems.Add(i);
+                        }
+                        dc.SaveChanges();
+                        ViewBag.Message = "Data successfully saved!";
+                        ModelState.Clear();
+                        ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed = 0, ClaimItemDescription = "" } };
                     }
-                    dc.SaveChanges();
-                    ViewBag.Message = "Data successfully saved!";
-                    ModelState.Clear();
-                    ci = new List<InsuranceLineItem> { new InsuranceLineItem { InsurerId = "", AmountClaimed = 0, ClaimItemDescription = "" } };
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
             return View("Index", ci);
         }
 
-        public JsonResult GetCustomers(string sord, int page, int rows, string searchString)
-        {
-            // Create Instance of DatabaseContext class for Accessing Database.
-            InsuranceClaimEntites db = new InsuranceClaimEntites();
+        //public JsonResult GetClaims(string searchString="CD001")
+        //{
+        //    // Create Instance of DatabaseContext class for Accessing Database.
+        //    InsuranceClaimEntites db = new InsuranceClaimEntites();
 
-            //Setting Paging
-            int pageIndex = Convert.ToInt32(page) - 1;
-            int pageSize = rows;
-            var Results = db.InsuranceLineItems.Select(
-                a => new
-                {
-                    a.InsurerLineItemId,
-                    a.BillDate,
-                    a.ClaimItemDescription,
-                    a.AmountClaimed,
-                    a.BenefitEmergency,
-                    a.BenefitId,
-                    a.BenefitAmount,
-                    a.ApprovedAmount,
-                });
+        //    var InsData = from ins in db.Insurances
+        //                  where (ins.InsurerName == searchString)
+        //                  select new
+        //                  {
+        //                      InsurerId = ins.InsurerId,
+        //                      InsurerName = ins.InsurerName,
+        //                      DOB = ins.DateOfBirth,
+        //                      ClaimRcvdDate = ins.ClaimReceivedDate,
+        //                      AprvdTotalAmt = ins.ApprovedTotalAmount,
+        //                      AprvdOvrRdAmt = ins.ApprovedOverrideAmount,
+        //                      InsuranceDetails = from insLineItm in ins.InsuranceLineItems
+        //                                         select new
+        //                                         {
+        //                                             insLineItm.BillDate,
+        //                                             insLineItm.ClaimItemDescription,
+        //                                             insLineItm.AmountClaimed,
+        //                                             insLineItm.BenefitEmergency,
+        //                                             insLineItm.BenefitAmount,
+        //                                             insLineItm.BenefitId,
+        //                                             insLineItm.ApprovedAmount
+        //                                         }
 
-            //Get Total Row Count
-            int totalRecords = Results.Count();
-            var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
 
-            //Setting Sorting
-            if (sord.ToUpper() == "DESC")
-            {
-                Results = Results.OrderByDescending(s => s.InsurerLineItemId);
-                Results = Results.Skip(pageIndex * pageSize).Take(pageSize);
-            }
-            else
-            {
-                Results = Results.OrderBy(s => s.BillDate);
-                Results = Results.Skip(pageIndex * pageSize).Take(pageSize);
-            }
-            //Setting Search
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                Results = Results.Where(m => m.ClaimItemDescription == searchString || m.ClaimItemDescription == searchString);
-            }
-            //Sending Json Object to View.
-            var jsonData = new
-            {
-                total = totalPages,
-                page,
-                records = totalRecords,
-                rows = Results
-            };
-            return Json(jsonData, JsonRequestBehavior.AllowGet);
 
-        }
+        //                  };
+                          
+
+
+        //    //Setting Paging
+         
+          
+
+        //    //Get Total Row Count
+           
+
+        //    //Setting Sorting
+           
+        //    //Sending Json Object to View.
+        //    var jsonData = new
+        //    {
+               
+               
+        //        rows = InsData
+        //    };
+        //    return Json(jsonData, JsonRequestBehavior.AllowGet);
+
+        //}
 
         [HttpPost]
         public JsonResult CreateClaim([Bind(Exclude = "InsurerLineItemId")] List<InsuranceLineItem> data)
@@ -156,5 +185,18 @@ namespace InsuranceClaimRequest.Controllers
 
         }
 
+        public ActionResult SearchClaim()
+        {
+            return View(ie.Insurances.ToList());
+        }
+
+        public ActionResult ClaimDetails(string InsurerId)
+        {
+
+            var data = ie.InsuranceLineItems.Where(m => m.InsurerId == InsurerId).ToList();
+            
+            return PartialView
+                ("ClaimDetailsPartial",data);
+        }
 	}
 }

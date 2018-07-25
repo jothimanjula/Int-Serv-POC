@@ -113,8 +113,20 @@
         }
     </style>
 </head>
+@using (Html.BeginForm("claimsHome", "Claims", FormMethod.Post))
+{ 
+    <div style="text-align: right; width:100%">
+        <table style="text-align: right; width:98%"><tr>
+            <td style="text-align: right;">
+            <input type="submit" id="claimsHome" value="Home" class="btn btn-info" />
+            </td></tr>
+        </table>        
+    </div>
+    <br/>
+}
 @using (Html.BeginForm("Save", "Claims", FormMethod.Post))
-{
+{    
+    
     <div class="panel panel-primary">
         <div class="panel-heading">Insurance Claims Header</div>
         <div class="panel-body" style="height: 180px">
@@ -149,7 +161,7 @@
                 <div class="row">
                     <div class="col-xs-3">
                         @Html.Label("Approved Total Amount")
-                        @Html.TextBox("ApprovedTotalAmount", null, new { @class = "form-control", maxlength = 10 })
+                        @Html.TextBox("ApprovedTotalAmount", null, new { @class = "form-control", maxlength = 10, @readonly = "readonly" })
                     </div>
                     <div class="col-xs-3">
                         @Html.Label("Approved Override Amount")
@@ -184,7 +196,7 @@
                             @if (Model != null && Model.Count > 0)
                             {
                                 int j = 0;
-                               // int rowNo = 0;
+                                // int rowNo = 0;
                                 foreach (var i in Model)
                                 {
                                 <tr style="border: 1px solid black">
@@ -197,23 +209,23 @@
                                     <td>@Html.TextBoxFor(a => a[j].ClaimItemDescription)<br />
                                         @Html.ValidationMessageFor(a => a[j].ClaimItemDescription, "", new { @class = "error" })
                                     </td>
-                                    <td>@Html.TextBoxFor(a => a[j].AmountClaimed)<br />
+                                    <td>@Html.TextBoxFor(a => a[j].AmountClaimed, new { onChange = "return CalculateApprvdAmt(this);" })<br />
                                         @Html.ValidationMessageFor(a => a[j].AmountClaimed, "", new { @class = "error" })
                                     </td>
-                                    <td style="text-align: center">@Html.CheckBoxFor(a => a[j].BenefitEmergency)</td>
-                                    <td>@Html.DropDownListFor(a => a[j].Benefit.BenefitName, new SelectList(
+                                    <td style="text-align: center">@Html.CheckBoxFor(a => a[j].BenefitEmergency, new { @onchange = "FetchBenefitPerct(this)" })</td>
+                                    <td>@Html.DropDownListFor(a => a[j].BenefitId, new SelectList(
                                        new List<Object>{ 
-                                       new { value = "HR" , text = "Hospital Room"  },
-                                       new { value = "PD", text = "Prescription Drugs" },
-                                       new { value = "SR" , text = "Surgery"}
-                               },
-                  "value",
-                  "text",
-                   2)) @Html.ValidationMessageFor(a => a[j].Benefit.BenefitName)</td>
-                                    <td>@Html.TextBoxFor(a => a[j].BenefitAmount)<br />
+                                                       new { BenefitId = "0" , BenefitName = " "  },
+                                                       new { BenefitId = "1" , BenefitName = "Hospital Room"  },
+                                                       new { BenefitId = "2", BenefitName = "Prescription Drugs" },
+                                                       new { BenefitId = "3" , BenefitName= "Surgery"}
+                                                       }, "BenefitId", "BenefitName", 0), new { @class = "form-control", @onchange = "FetchBenefitPerct(this)" })
+                                        
+                                         @Html.ValidationMessageFor(a => a[j].Benefit.BenefitName)</td>
+                                    <td>@Html.TextBoxFor(a => a[j].BenefitAmount, new { @readonly = "readonly" })<br />
                                         @Html.ValidationMessageFor(a => a[j].BenefitAmount, "", new { @class = "error" })
                                     </td>
-                                    <td>@Html.TextBoxFor(a => a[j].ApprovedAmount)<br />
+                                    <td>@Html.TextBoxFor(a => a[j].ApprovedAmount, new { onChange = "return calculateTotalApprovedAmt();" })<br />
                                         @Html.ValidationMessageFor(a => a[j].ApprovedAmount, "", new { @class = "error" })
                                     </td>
 
@@ -263,22 +275,19 @@
 
 
     <script type='text/javascript'>
-
-
         $(document).ready(function () {
             $(document).on("click", ".deleteContact", function () {
                 $(this).closest("tr").remove(); // closest used to remove the respective 'tr' in which I have my controls   
             });
             $("#addNew").click(function (e) {
-
-                e.preventDefault(); debugger
+                e.preventDefault(); 
                 var $tableBody = $("#dataTable");
                 var $trLast = $tableBody.find("tr:last");
                 var $trNew = $trLast.clone();
                 $trNew.find('input').val('');
+                $trNew.find('input').prop('checked', false);
                 $trNew.find('field-validation-error error').remove();
-                var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
-                //  $trNew.find("td:last").html('<a href="#" class="remove">Remove</a>');
+                var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);          
                
                 $trNew.find("td:last").html(' <button type="button"  name="btnDelete" id="btnDelete" class="deleteContact btn btn btn-danger btn-xs">Remove</button>');
                 $.each($trNew.find(':input'), function (i, val) {
@@ -306,58 +315,69 @@
                 $.validator.unobtrusive.parse(form);
             });
 
-            // 2. Remove 
-
-
-            //$("#btnRemoveRow").click(function (e) {debugger
-            //    e.preventDefault();
-            //    $(this).parent().parent().remove();
-            //});
             $('a.remove').on("click", function (e) {
 
 
-            });
-            //$("#DOB").datepicker({
-            //    dateFormat: "dd/MM/yy",
-            //    changeMonth: true,
-            //    changeYear: true,
-            //    yearRange: "-60:+0"
-            //});
-            //$("#ClaimRecvdDate").datepicker({
-            //    dateFormat: "dd/MM/yy",
-            //    changeMonth: true,
-            //    changeYear: true,
-            //    yearRange: "-60:+0"
-            //});
-            //$("#btnAddRow").click(function () {
-            //    $("#InsClaimDtlsgrid").jqGrid('addRow', null, []);
-            //    totalAprvdAmt = 0;
-            //    var allRowsOnCurrentPage = $('#InsClaimDtlsgrid').jqGrid('getDataIDs');
-
-            //    for (var i = 0; i <= allRowsOnCurrentPage.length; i++)
-            //    {                    
-            //        if ($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != "" && $("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val() != null) {
-            //            totalAprvdAmt += parseFloat($("#" + allRowsOnCurrentPage[i] + "_ApprovedAmount").val());
-            //        }
-            //    }
-
-            //    $("#ApprovedTotalAmount").val(totalAprvdAmt.toFixed(2));
-            //});
-
-            //$("#btnSaveClaims").click(function () {         
-
-            //    var grid = $("#InsClaimDtlsgrid");
-            //    var ids = grid.jqGrid('getDataIDs');
-
-            //    for (var i = 0; i < ids.length; i++) {
-            //        grid.jqGrid('saveRow', ids[i]);
-            //    }
-            //});
+            });          
         });
         $(function () {
             jQuery.event.handle = jQuery.event.dispatch
         });
 
+        function FetchBenefitPerct(ctr)
+        {
+            var BType = 0;
+            var BEmergency = false;
+            var rowindex = ctr.parentNode.parentNode.rowIndex - 1;
+            var ctrlName = ctr.name;
+            if (ctrlName == "[" + rowindex + "].BenefitEmergency")
+            {
+                BEmergency = ctr.checked;
+                BType = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(5).find('option:selected').val();
+            }
+            else if (ctrlName == "[" + rowindex + "].BenefitId")
+            {
+                BType = ctr.selectedIndex;
+                BEmergency = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(4).find('input').is(':checked');
+            }
+            var claimamount = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(3).find('input').val();
+             
+            var Benifitamount = 0;
+            if (BType > 0) { 
+                $.ajax({
+                    type: "POST",
+                    url: "/Claims/GetBenefitPerct/",
+                    data: {
+                        BenefitTyp: BType,
+                        EmergencyBenefit: BEmergency
+                    },
+                    success: function (result) {                   
+                        Benifitamount = result.BPT;                    
+                        $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(6).find('input').val(Benifitamount);
+                        CalculateApprvdAmt(ctr);
+                    }
+                });
+            }
+        }
+        function CalculateApprvdAmt(ctr) {
+            var rowindex = ctr.parentNode.parentNode.rowIndex - 1;
+            var claimAmount = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(3).find('input').val();
+            var benefirPerct = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(6).find('input').val();
+            var calcPrice = (claimAmount * benefirPerct / 100).toFixed(2);
+            $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(7).find('input').val(calcPrice);
+            calculateTotalApprovedAmt();
+        }
+        function calculateTotalApprovedAmt()
+        {            
+            var rowCount = $('#dataTable tbody tr').length;
+            var approvedamount = 0;           
+            for (var i = 0; i < rowCount; i++) {
+                var rowamount = $('#dataTable tbody tr:eq(' + i + ')').children('td').eq(7).find('input').val();
+                approvedamount = (parseFloat(approvedamount) + parseFloat(rowamount));
+                }
+            
+            $('#ApprovedTotalAmount').val(approvedamount.toFixed(2));
 
+        }
     </script>
 }

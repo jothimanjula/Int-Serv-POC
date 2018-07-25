@@ -27,7 +27,6 @@ namespace InsuranceClaimRequest.Models
         public string ClaimItemDescription { get; set; }
         [Required(ErrorMessage = "Required")]
         public decimal AmountClaimed { get; set; }
-        [Required(ErrorMessage = "Required")]
         public bool BenefitEmergency { get; set; }
         [Required(ErrorMessage = "Required")]
         public Nullable<int> BenefitId { get; set; }
