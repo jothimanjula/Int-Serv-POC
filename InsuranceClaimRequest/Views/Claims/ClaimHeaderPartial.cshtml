@@ -172,7 +172,7 @@
 
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "ClaimDetails", new { id = item.InsurerId }, new { @class="claim-details"})
+                    @Html.ActionLink("Details", "ClaimDetails","Claims", new { id = item.InsurerId }, new { @class="claim-details"})
                 </td>
 
             </tr>
@@ -181,4 +181,8 @@
 
 
     </table>
+</div>
+<div class="panel-heading">Insurance Claims Details</div>
+<div class="panel-body" style="height: auto">
+<div id="divClaimDetails" class="float-bottom"></div>
 </div>
