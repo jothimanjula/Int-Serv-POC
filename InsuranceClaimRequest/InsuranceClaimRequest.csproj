@@ -110,6 +110,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Claims.css" />
     <Content Include="Content\fonts\gijgo-material.svg" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\grid\checkbox.css" />
@@ -190,6 +191,7 @@
     <Content Include="Content\fonts\gijgo-material.woff" />
     <Content Include="Content\fonts\gijgo-material.ttf" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Scripts\Claims.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />

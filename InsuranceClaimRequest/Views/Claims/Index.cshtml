@@ -9,114 +9,21 @@
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <style type="text/css">
-        .table > thead > tr > th {
-            border-right: 1px solid #ddd;
-            border-bottom: 0;
-            text-align: center;
-        }
-
-        .table > tbody > tr > td {
-            border-right: 1px solid #ddd;
-        }
-
-        .table > thead > tr > th:last-of-type {
-            border-right: 0px;
-        }
-
-        .table > tbody > tr > td:last-of-type {
-            border-right: 0px;
-        }
-
-        .panel-body {
-            padding: 0;
-        }
-
-            .panel-body > .table {
-                margin-bottom: 0px;
-            }
-
-        table.blueTable {
-            border: 1px solid #1C6EA4;
-            background-color: #EEEEEE;
-            width: 100%;
-            text-align: left;
-            border-collapse: collapse;
-        }
-
-            table.blueTable td, table.blueTable th {
-                border: 1px solid #AAAAAA;
-                padding: 3px 2px;
-            }
-
-            table.blueTable tbody td {
-                font-size: 13px;
-            }
-
-            table.blueTable tr:nth-child(even) {
-                background: #D0E4F5;
-            }
-
-            table.blueTable thead {
-                background: #1C6EA4;
-                background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-                background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-                background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-                border-bottom: 2px solid #444444;
-            }
-
-                table.blueTable thead th {
-                    font-size: 15px;
-                    font-weight: bold;
-                    color: #FFFFFF;
-                    border-left: 2px solid #D0E4F5;
-                }
-
-                    table.blueTable thead th:first-child {
-                        border-left: none;
-                    }
-
-            table.blueTable tfoot {
-                font-size: 14px;
-                font-weight: bold;
-                color: #FFFFFF;
-                background: #D0E4F5;
-                background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-                background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-                background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-                border-top: 2px solid #444444;
-            }
-
-                table.blueTable tfoot td {
-                    font-size: 14px;
-                }
-
-                table.blueTable tfoot .links {
-                    text-align: right;
-                }
-
-                    table.blueTable tfoot .links a {
-                        display: inline-block;
-                        background: #1C6EA4;
-                        color: #FFFFFF;
-                        padding: 2px 8px;
-                        border-radius: 5px;
-                    }
-
-        .ins-margin {
-            margin: 20px;
-        }
-
-        .form-control {
-            width: 200px;
-            text-transform: uppercase;
-        }
-    </style>
+    <link href="~/Content/Claims.css" rel="stylesheet" /> 
+    <script src="~/Scripts/Claims.js"></script>   
 </head>
+@section Scripts
+       {
+    @Scripts.Render("~/bundles/jqueryval")  
+}
 @using (Html.BeginForm("claimsHome", "Claims", FormMethod.Post))
 { 
     <div style="text-align: right; width:100%">
         <table style="text-align: right; width:98%"><tr>
+            <td style="text-align: right;">
+
+            </td>
+            <tr>
             <td style="text-align: right;">
             <input type="submit" id="claimsHome" value="Home" class="btn btn-info" />
             </td></tr>
@@ -125,13 +32,11 @@
     <br/>
 }
 @using (Html.BeginForm("Save", "Claims", FormMethod.Post))
-{    
-    
+{ 
     <div class="panel panel-primary">
         <div class="panel-heading">Insurance Claims Header</div>
         <div class="panel-body" style="height: 180px">
             <div class="ins-margin">
-
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
@@ -176,8 +81,7 @@
         <div class="panel-heading">Insurance Claims Details</div>
         <div class="ins-margin">
             <div class="row">
-                <div class="col-xs-12">
-                   @* <div><a href="#" id="addNew">Add New</a></div>*@
+                <div class="col-xs-12">                  
                     <table id="dataTable" border="0" cellpadding="0" cellspacing="0" class="blueTable">
                         <thead>
                             <tr>
@@ -195,14 +99,11 @@
                         <tbody>
                             @if (Model != null && Model.Count > 0)
                             {
-                                int j = 0;
-                                // int rowNo = 0;
+                                int j = 0;                                
                                 foreach (var i in Model)
                                 {
                                 <tr style="border: 1px solid black">
-
-                                    <td>@*@{rowNo++;}@rowNo*@</td>
-
+                                    <td></td>
                                     <td>@Html.EditorFor(a => a[j].BillDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
                                         <br />@Html.ValidationMessageFor(a => a[j].BillDate, "", new { @class = "error" })
                                     </td>
@@ -228,17 +129,10 @@
                                     <td>@Html.TextBoxFor(a => a[j].ApprovedAmount, new { onChange = "return calculateTotalApprovedAmt();" })<br />
                                         @Html.ValidationMessageFor(a => a[j].ApprovedAmount, "", new { @class = "error" })
                                     </td>
-
-
-
                                     <td>
                                         @if (j > 0)
-                                        {
-                              
-                                            <button type="button" id="btnDelete" name="btnDelete" class="deleteContact btn btn btn-danger btn-xs">Remove</button>@*
-                              
-                                <a href="#" id="aRmv" class="remove">Remove</a>*@
-                                            // <input type="button" name="btnRemoveRow" id="btnRemoveRow" value="Remove" class="btn btn-info"  />
+                                        {                             
+                                            <button type="button" id="btnDelete" name="btnDelete" class="deleteContact btn btn btn-danger btn-xs">Remove</button>
                                         }
                                     </td>
                                 </tr>
@@ -247,138 +141,15 @@
                             }
                         </tbody>
                     </table>
-                    @*  <input type="submit" value="Save Bulk Data" />*@
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-xs-12" style="text-align: right">
-                    @* <input type="button" id="btnSaveClaims" value="Save" class="btn btn-info"  />*@
-                   @*  <div><a href="#" id="addNew">Add New</a></div>*@
+                <div class="col-xs-12" style="text-align: right">                   
                     <input type="button" id="addNew" value="Add Row" class="btn btn-info" />
                     <input type="submit" value="Save" class="btn btn-info" />
                 </div>
             </div>
         </div>
     </div>
-
-}
-
-
-
-
-@section Scripts
-       {
-
-
-    @Scripts.Render("~/bundles/jqueryval")
-
-
-    <script type='text/javascript'>
-        $(document).ready(function () {
-
-            $(document).on("click", ".deleteContact", function () {
-                $(this).closest("tr").remove(); // closest used to remove the respective 'tr' in which I have my controls   
-            });
-            $("#addNew").click(function (e) {
-                e.preventDefault(); 
-                var $tableBody = $("#dataTable");
-                var $trLast = $tableBody.find("tr:last");
-                var $trNew = $trLast.clone();
-                $trNew.find('input').val('');
-                $trNew.find('input').prop('checked', false);
-                $trNew.find('field-validation-error error').remove();
-                var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);          
-               
-                $trNew.find("td:last").html(' <button type="button"  name="btnDelete" id="btnDelete" class="deleteContact btn btn btn-danger btn-xs">Remove</button>');
-                $.each($trNew.find(':input'), function (i, val) {
-                    // Replaced Name
-                    var oldN = $(this).attr('name');
-                    var newN = oldN.replace('[' + suffix + ']', '[' + (parseInt(suffix) + 1) + ']');
-                    $(this).attr('name', newN);
-                    //Replaced value
-                    var type = $(this).attr('type');
-                    if (type != undefined) {
-                        if (type.toLowerCase() == "text") {
-                            $(this).attr('value', '');
-                        }
-                    }
-                    // If you have another Type then replace with default value
-                    $(this).removeClass("input-validation-error");
-
-                });
-                $trLast.after($trNew);
-
-                // Re-assign Validation 
-                var form = $("form")
-                    .removeData("validator")
-                    .removeData("unobtrusiveValidation");
-                $.validator.unobtrusive.parse(form);
-            });
-
-            $('a.remove').on("click", function (e) {
-
-
-            });          
-        });
-        $(function () {
-            jQuery.event.handle = jQuery.event.dispatch
-        });
-
-        function FetchBenefitPerct(ctr)
-        {
-            var BType = 0;
-            var BEmergency = false;
-            var rowindex = ctr.parentNode.parentNode.rowIndex - 1;
-            var ctrlName = ctr.name;
-            if (ctrlName == "[" + rowindex + "].BenefitEmergency")
-            {
-                BEmergency = ctr.checked;
-                BType = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(5).find('option:selected').val();
-            }
-            else if (ctrlName == "[" + rowindex + "].BenefitId")
-            {
-                BType = ctr.selectedIndex;
-                BEmergency = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(4).find('input').is(':checked');
-            }
-            var claimamount = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(3).find('input').val();
-             
-            var Benifitamount = 0;
-            if (BType > 0) { 
-                $.ajax({
-                    type: "POST",
-                    url: "/Claims/GetBenefitPerct/",
-                    data: {
-                        BenefitTyp: BType,
-                        EmergencyBenefit: BEmergency
-                    },
-                    success: function (result) {                   
-                        Benifitamount = result.BPT;                    
-                        $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(6).find('input').val(Benifitamount);
-                        CalculateApprvdAmt(ctr);
-                    }
-                });
-            }
-        }
-        function CalculateApprvdAmt(ctr) {
-            var rowindex = ctr.parentNode.parentNode.rowIndex - 1;
-            var claimAmount = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(3).find('input').val();
-            var benefirPerct = $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(6).find('input').val();
-            var calcPrice = (claimAmount * benefirPerct / 100).toFixed(2);
-            $('#dataTable tbody tr:eq(' + rowindex + ')').children('td').eq(7).find('input').val(calcPrice);
-            calculateTotalApprovedAmt();
-        }
-        function calculateTotalApprovedAmt()
-        {            
-            var rowCount = $('#dataTable tbody tr').length;
-            var approvedamount = 0;           
-            for (var i = 0; i < rowCount; i++) {
-                var rowamount = $('#dataTable tbody tr:eq(' + i + ')').children('td').eq(7).find('input').val();
-                approvedamount = (parseFloat(approvedamount) + parseFloat(rowamount));
-                }
-            
-            $('#ApprovedTotalAmount').val(approvedamount.toFixed(2));
-
-        }
-    </script>
 }
