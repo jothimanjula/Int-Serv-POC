@@ -36,7 +36,7 @@ INSERT INTO [dbo].[Users]
            ,[Expired]
            ,[password])
      VALUES
-           (1,'ManjulaJ','Manjula','Jothilingam', GETDATE(),NULL,NULL,NULL,'N','manjula@123')
+           ('ManjulaJ','Manjula','Jothilingam', GETDATE(),NULL,NULL,NULL,'N','manjula@123')
 GO
 Create Table Benefit
 (
@@ -54,27 +54,47 @@ GO
 Insert into Benefit Values ('SR','Surgery',90,100)
 GO
 
-Create Table Insurance(
-InsurerId int primary Key not null Identity,
-InsurerName nvarchar(50) not null,
-DateOfBirth DateTime not null,
-ReceivedClaimAmount Decimal not null,
-ApprovedTotalAmount Decimal not null,
-ApprovedOverrideAmount Decimal not null
-)
+CREATE TABLE [dbo].[Insurance](
+	[InsurerId] [nvarchar](10) NOT NULL,
+	[InsurerName] [nvarchar](50) NOT NULL,
+	[DateOfBirth] [datetime] NOT NULL,
+	[ReceivedClaimAmount] [decimal](18, 0) NOT NULL,
+	[ApprovedTotalAmount] [decimal](18, 0) NOT NULL,
+	[ApprovedOverrideAmount] [decimal](18, 0) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[InsurerId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
 GO
 
-Create table InsuranceLineItems(
-InsurerLineItemId int primary key not null identity,
-InsurerId int not null,
-BillDate DateTime not null,
-ClaimItemDescription nvarchar(500),
-AmountClaimed Decimal Not null,
-BenefitEmergency Bit not null,
-BenefitId int,
-BenefitAmount Decimal not null,
-ApprovedAmount Decimal not null,
-FOREIGN KEY (BenefitId) REFERENCES Benefit(BenefitId),
-FOREIGN KEY (InsurerId) REFERENCES Insurance(InsurerId)
-)
+
+
+CREATE TABLE [dbo].[InsuranceLineItems](
+	[InsurerLineItemId] [int] IDENTITY(1,1) NOT NULL,
+	[InsurerId] [nvarchar](10) NOT NULL,
+	[BillDate] [datetime] NOT NULL,
+	[ClaimItemDescription] [nvarchar](500) NULL,
+	[AmountClaimed] [decimal](18, 0) NOT NULL,
+	[BenefitEmergency] [bit] NOT NULL,
+	[BenefitId] [int] NULL,
+	[BenefitAmount] [decimal](18, 0) NOT NULL,
+	[ApprovedAmount] [decimal](18, 0) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[InsurerLineItemId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
 GO
+
+ALTER TABLE [dbo].[InsuranceLineItems]  WITH CHECK ADD FOREIGN KEY([BenefitId])
+REFERENCES [dbo].[Benefit] ([BenefitID])
+GO
+
+ALTER TABLE [dbo].[InsuranceLineItems]  WITH CHECK ADD FOREIGN KEY([InsurerId])
+REFERENCES [dbo].[Insurance] ([InsurerId])
+GO
+
+
